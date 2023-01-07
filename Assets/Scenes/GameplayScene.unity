@@ -400,6 +400,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 2112885998}
+  pieceShelf: {fileID: 860997556}
+  inputManager: {fileID: 1458483735}
+  cellSize: 0.65
+  levelJson: {fileID: 4900000, guid: 19dd30a4243d4a9ead936ed86fad121d, type: 3}
 --- !u!4 &567193968
 Transform:
   m_ObjectHideFlags: 0
@@ -501,7 +505,10 @@ MonoBehaviour:
   length: 5
   definitions:
   - {fileID: 11400000, guid: 6e461d06041b64f4eb1b36315fd76391, type: 2}
-  - {fileID: 11400000, guid: f9a6a48e1c1ef0643ab4f1cba051a33c, type: 2}
+  - {fileID: 11400000, guid: 9681d51616377134c86455edcedab953, type: 2}
+  - {fileID: 11400000, guid: fdebeefdf35a3cf48a62c8c62632e3ce, type: 2}
+  - {fileID: 11400000, guid: 2586036724de6af44aceeb144290f282, type: 2}
+  - {fileID: 11400000, guid: 6bcd235b594495948ba93fbd92e92480, type: 2}
 --- !u!156049354 &860997557
 Grid:
   m_ObjectHideFlags: 0

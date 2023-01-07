@@ -10,11 +10,23 @@ namespace Oatsbarley.GameJams.LD52
         [SerializeField] private float scaleToUnits = 1f;
         
         public PieceDefinition Definition { get; private set; }
+        public bool IsLocked { get; private set; }
+
+        private void Start()
+        {
+            transform.localScale = Vector3.one * GameManager.Instance.CellSize;
+        }
 
         public void SetDefinition(PieceDefinition definition)
         {
             Definition = definition;
             SetSprite(definition.Sprite);
+        }
+
+        public void Lock()
+        {
+            IsLocked = true;
+            // todo some sort of visual indication
         }
 
         private void SetSprite(Sprite sprite)

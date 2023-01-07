@@ -1,6 +1,7 @@
 namespace Oatsbarley.GameJams.LD52
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
@@ -14,6 +15,11 @@ namespace Oatsbarley.GameJams.LD52
 
         public IEnumerable<T> All => placedObjects.Values;
         public IEnumerable<(Vector2Int gridPos, T obj)> AllWithPositions => placedObjects.Select(kvp => (kvp.Key, kvp.Value));
+
+        private void Start()
+        {
+            grid.cellSize = new Vector3(GameManager.Instance.CellSize, GameManager.Instance.CellSize, GameManager.Instance.CellSize);
+        }
 
         public T GetObjectInGridPosition(Vector2Int gridPosition)
         {
@@ -29,6 +35,8 @@ namespace Oatsbarley.GameJams.LD52
         {
             return new SurroundingObjects<T>
             {
+                gridPosition = gridPosition,
+                subjectObject = GetObjectInGridPosition(gridPosition),
                 above = GetObjectInGridPosition(gridPosition + Vector2Int.up),
                 left = GetObjectInGridPosition(gridPosition + Vector2Int.left),
                 right = GetObjectInGridPosition(gridPosition + Vector2Int.right),
@@ -63,21 +71,27 @@ namespace Oatsbarley.GameJams.LD52
         }
     }
 
-    public struct SurroundingObjects<T>
+    public struct SurroundingObjects<T> : IEnumerable<(T obj, Vector2Int direction)>
     {
+        public Vector2Int gridPosition;
+        public T subjectObject;
+
         public T above;
         public T left;
         public T right;
         public T below;
 
-        public bool Any(Func<T, bool> predicate)
+        public IEnumerator<(T obj, Vector2Int direction)> GetEnumerator()
         {
-            if (predicate(above)) return true;
-            if (predicate(left)) return true;
-            if (predicate(right)) return true;
-            if (predicate(below)) return true;
+            yield return (above, Vector2Int.up);
+            yield return (left, Vector2Int.left);
+            yield return (right, Vector2Int.right);
+            yield return (below, Vector2Int.down);
+        }
 
-            return false;
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

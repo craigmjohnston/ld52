@@ -2,9 +2,11 @@ namespace Oatsbarley.GameJams.LD52
 {
     using System;
     using System.Collections.Generic;
-    using NaughtyAttributes;
+    using System.Linq;
+    using Oatsbarley.GameJams.LD52.Definitions;
     using Oatsbarley.GameJams.LD52.Pieces;
     using UnityEngine;
+    using Random = UnityEngine.Random;
 
     public class PieceShelf : MonoBehaviour
     {
@@ -13,16 +15,49 @@ namespace Oatsbarley.GameJams.LD52
 
         [SerializeField] private int length;
 
-        [Header("Debugging (TO BE REMOVED)")] 
         [SerializeField] private PieceDefinition[] definitions;
 
-        [Button()]
-        public void FillShelf()
+        public void FillShelf(string[] required, DropChance[] dropChances)
         {
-            for (var i = 0; i < length; i++)
+            int count = 0;
+            
+            var requiredDefinitions = required.Select(r => definitions.FirstOrDefault(d => d.Tag == r));
+            foreach (var def in requiredDefinitions)
             {
-                var piece = InstantiatePiece(definitions[i % definitions.Length]);
-                shelfGrid.PlaceObject(piece, new Vector2Int(i, 0));
+                var piece = InstantiatePiece(def);
+                shelfGrid.PlaceObject(piece, new Vector2Int(count, 0));
+                count += 1;
+            }
+
+            float totalChance = dropChances.Sum(d => d.Chance);
+            Dictionary<float, DropChance> normalisedChances = new Dictionary<float, DropChance>();
+            var ordered = dropChances.OrderBy(d => d.Chance);
+
+            float runningTotal = 0;
+            foreach (var chance in ordered)
+            {
+                normalisedChances[runningTotal] = chance;
+                runningTotal += chance.Chance / totalChance;
+            }
+
+            var highestChance = normalisedChances.OrderBy(kvp => kvp.Key).LastOrDefault().Value;
+
+            for (int i = 0; i < length - count; i++)
+            {
+                var value = Random.value;
+                foreach (var kvp in normalisedChances.OrderBy(kvp => kvp.Key))
+                {
+                    if (kvp.Key < value && kvp.Value != highestChance)
+                    {
+                        continue;
+                    }
+
+                    var def = definitions.FirstOrDefault(d => d.Tag == kvp.Value.Tag);
+                    var piece = InstantiatePiece(def);
+                    shelfGrid.PlaceObject(piece, new Vector2Int(count + i, 0));
+
+                    break;
+                }
             }
         }
 
@@ -110,11 +145,21 @@ namespace Oatsbarley.GameJams.LD52
             }
         }
 
-        public void ReplacePiece(Piece piece, Vector2Int gridPosition)
+        public void ReplacePiece(Piece piece, Vector2Int? gridPosition = null)
         {
-            var selectStart = gridPosition.x;
+            if (gridPosition == null)
+            {
+                gridPosition = new Vector2Int(length - 1, 0);
+            }
+            
+            var selectStart = gridPosition.Value.x;
             ShiftPieces(selectStart, length - selectStart, +1);
-            shelfGrid.PlaceObject(piece, gridPosition);
+            shelfGrid.PlaceObject(piece, gridPosition.Value);
+        }
+
+        public bool HasPieces()
+        {
+            return shelfGrid.All.Any();
         }
 
         private Piece InstantiatePiece(PieceDefinition definition)

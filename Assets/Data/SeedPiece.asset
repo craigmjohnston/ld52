@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83672a25466a44a2a2e7a5f8523ab3fe, type: 3}
-  m_Name: StalkPiece
+  m_Script: {fileID: 11500000, guid: 19acbe5f826c453c981c69fd3be1bb2e, type: 3}
+  m_Name: SeedPiece
   m_EditorClassIdentifier: 
-  Tag: piece_stalk
-  Name: Stalk
-  Sprite: {fileID: 21300000, guid: 1905999a2e68b7b4ca2408bdc46d9cef, type: 3}
+  Tag: piece_seed
+  Name: Seed
+  Sprite: {fileID: 21300000, guid: 5199b448885d14f46a9349fda7cec463, type: 3}

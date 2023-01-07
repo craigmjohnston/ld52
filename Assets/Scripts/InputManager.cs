@@ -1,5 +1,7 @@
 namespace Oatsbarley.GameJams.LD52
 {
+    using System;
+    using System.Linq;
     using UnityEngine;
     using UnityEngine.InputSystem;
 
@@ -11,6 +13,8 @@ namespace Oatsbarley.GameJams.LD52
         
         [SerializeField] private float dragZLevel;
         [SerializeField] private float baseZLevel = 0f;
+
+        public event Action AllPiecesUsed;
 
         private Piece currentPiece;
         private Vector3 mouseOffset;
@@ -51,6 +55,11 @@ namespace Oatsbarley.GameJams.LD52
         private void MouseUp()
         {
             if (TryReplaceCurrentPieceIntoShelf())
+            {
+                return;
+            }
+
+            if (currentPiece == null)
             {
                 return;
             }
@@ -99,18 +108,32 @@ namespace Oatsbarley.GameJams.LD52
 
         private bool TryPlaceCurrentPiece()
         {
-            if (currentPiece == null)
-            {
-                return false;
-            }
-            
             var cursorPosition = GetCursorPosition();
-            if (!gridManager.PlaceObject(currentPiece, cursorPosition))
+            var surrounding = gridManager.GetSurroundingObjects(cursorPosition);
+
+            if (!currentPiece.Definition.CanPlace(surrounding))
+            {
+                Debug.LogError("Couldn't place piece in position, it doesn't want to go there.");
+                pieceShelf.ReplacePiece(currentPiece);
+            }
+            else if (surrounding.Any(p => p.obj != null && !p.obj.Definition.CanPlaceOther(p.obj, p.direction * -1, surrounding)))
+            {
+                Debug.LogError("Couldn't place piece in position, something else doesn't want it to go there.");
+                pieceShelf.ReplacePiece(currentPiece);
+            } 
+            else if (!gridManager.PlaceObject(currentPiece, cursorPosition))
             {
                 Debug.LogError("Couldn't place piece in position, something is already there.");
+                pieceShelf.ReplacePiece(currentPiece);
             }
 
             currentPiece = null;
+
+            if (!pieceShelf.HasPieces())
+            {
+                AllPiecesUsed?.Invoke();
+            }
+            
             return true;
         }
 

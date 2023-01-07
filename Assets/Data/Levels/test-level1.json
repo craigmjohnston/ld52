@@ -1,0 +1,52 @@
+{
+    "scenarios": [
+        {
+            "name": "First Days of Spring",
+            "startingShelf": ["piece_seed"],
+            "shelfLength": 2,
+            "dropChances": [
+                { "tag": "piece_water", "chance": 1 }
+            ]
+        },
+        {
+            "name": "Spring",
+            "startingShelf": [],
+            "shelfLength": 5,
+            "dropChances": [
+                { "tag": "piece_stalk", "chance": 1 },
+                { "tag": "piece_root", "chance": 2 },
+                { "tag": "piece_leaf", "chance": 3 }
+            ]            
+        },
+        {
+            "name": "Summer",
+            "startingShelf": [],
+            "shelfLength": 5,
+            "dropChances": [
+                { "tag": "piece_stalk", "chance": 4 },
+                { "tag": "piece_root", "chance": 2 },
+                { "tag": "piece_leaf", "chance": 3 }
+            ]
+        },
+        {
+            "name": "Autumn",
+            "startingShelf": [],
+            "shelfLength": 5,
+            "dropChances": [
+                { "tag": "piece_stalk", "chance": 4 },
+                { "tag": "piece_root", "chance": 2 },
+                { "tag": "piece_leaf", "chance": 3 }
+            ]
+        },
+        {
+            "name": "Winter",
+            "startingShelf": [],
+            "shelfLength": 5,
+            "dropChances": [
+                { "tag": "piece_stalk", "chance": 4 },
+                { "tag": "piece_root", "chance": 2 },
+                { "tag": "piece_leaf", "chance": 3 }
+            ]
+        }
+    ]
+}
