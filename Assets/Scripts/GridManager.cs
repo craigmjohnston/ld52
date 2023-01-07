@@ -1,13 +1,19 @@
 namespace Oatsbarley.GameJams.LD52
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
     using UnityEngine;
 
     public class GridManager<T> : MonoBehaviour where T : MonoBehaviour
     {
         [SerializeField] private Grid grid;
+        [SerializeField] private float zPosition;
 
         private Dictionary<Vector2Int, T> placedObjects = new Dictionary<Vector2Int, T>();
+
+        public IEnumerable<T> All => placedObjects.Values;
+        public IEnumerable<(Vector2Int gridPos, T obj)> AllWithPositions => placedObjects.Select(kvp => (kvp.Key, kvp.Value));
 
         public T GetObjectInGridPosition(Vector2Int gridPosition)
         {
@@ -44,7 +50,7 @@ namespace Oatsbarley.GameJams.LD52
             } 
             
             var worldPos = grid.GetCellCenterWorld(new Vector3Int(gridPosition.x, gridPosition.y));
-            obj.transform.position = worldPos;
+            obj.transform.position = new Vector3(worldPos.x, worldPos.y, zPosition);
 
             placedObjects[gridPosition] = obj;
 
@@ -63,5 +69,15 @@ namespace Oatsbarley.GameJams.LD52
         public T left;
         public T right;
         public T below;
+
+        public bool Any(Func<T, bool> predicate)
+        {
+            if (predicate(above)) return true;
+            if (predicate(left)) return true;
+            if (predicate(right)) return true;
+            if (predicate(below)) return true;
+
+            return false;
+        }
     }
 }

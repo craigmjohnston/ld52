@@ -370,6 +370,51 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+--- !u!1 &567193966
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 567193968}
+  - component: {fileID: 567193967}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &567193967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567193966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f65ec24c76324cc9b9a4d49cdb339ffb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 2112885998}
+--- !u!4 &567193968
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567193966}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.7555193, y: -1.482797, z: 0.59272075}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,6 +499,9 @@ MonoBehaviour:
   piecePrefab: {fileID: 2307137325961220273, guid: 2ce6ad0714d3a7147bfc9fd267910806,
     type: 3}
   length: 5
+  definitions:
+  - {fileID: 11400000, guid: 6e461d06041b64f4eb1b36315fd76391, type: 2}
+  - {fileID: 11400000, guid: f9a6a48e1c1ef0643ab4f1cba051a33c, type: 2}
 --- !u!156049354 &860997557
 Grid:
   m_ObjectHideFlags: 0
@@ -479,6 +527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 860997557}
+  zPosition: 0
 --- !u!4 &860997559
 Transform:
   m_ObjectHideFlags: 0
@@ -629,6 +678,8 @@ MonoBehaviour:
   inputCamera: {fileID: 330585545}
   gridManager: {fileID: 2112885998}
   pieceShelf: {fileID: 860997556}
+  dragZLevel: -0.12
+  baseZLevel: 0
 --- !u!1 &2112885995
 GameObject:
   m_ObjectHideFlags: 0
@@ -687,3 +738,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 2112885996}
+  zPosition: 0

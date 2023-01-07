@@ -8,6 +8,9 @@ namespace Oatsbarley.GameJams.LD52
         [SerializeField] private Camera inputCamera;
         [SerializeField] private PieceGridManager gridManager;
         [SerializeField] private PieceShelf pieceShelf;
+        
+        [SerializeField] private float dragZLevel;
+        [SerializeField] private float baseZLevel = 0f;
 
         private Piece currentPiece;
         private Vector3 mouseOffset;
@@ -16,8 +19,9 @@ namespace Oatsbarley.GameJams.LD52
         {
             if (currentPiece != null)
             {
-                var mouseWorldPosition = inputCamera.ScreenToWorldPoint(Input.mousePosition);
-                currentPiece.transform.position = mouseWorldPosition - mouseOffset;
+                var mouseWorldPos = GetMouseWorldPosition();
+                var offsetPos = mouseWorldPos - mouseOffset;
+                currentPiece.transform.position = new Vector3(offsetPos.x, offsetPos.y, dragZLevel);
             }
         }
         
@@ -59,7 +63,7 @@ namespace Oatsbarley.GameJams.LD52
 
         private bool TrySelectShelfPiece()
         {
-            var mouseWorldPos = inputCamera.ScreenToWorldPoint(Input.mousePosition);
+            var mouseWorldPos = GetMouseWorldPosition();
 
             if (!pieceShelf.TryGetGridPosition(mouseWorldPos, out var gridPos))
             {
@@ -80,7 +84,7 @@ namespace Oatsbarley.GameJams.LD52
 
         private bool TryReplaceCurrentPieceIntoShelf()
         {
-            var mouseWorldPos = inputCamera.ScreenToWorldPoint(Input.mousePosition);
+            var mouseWorldPos = GetMouseWorldPosition();
 
             if (!pieceShelf.TryGetGridPosition(mouseWorldPos, out var gridPos))
             {
@@ -113,10 +117,20 @@ namespace Oatsbarley.GameJams.LD52
         private Vector2Int GetCursorPosition()
         {
             // todo ability to get "cursor position" for gamepads/keyboard
-            var mouseWorldPos = inputCamera.ScreenToWorldPoint(Input.mousePosition);
+            var mouseWorldPos = GetMouseWorldPosition();
             var gridPos = gridManager.WorldPositionToGridPosition(mouseWorldPos);
             
             return gridPos;
+        }
+
+        private Vector3 GetMouseWorldPosition()
+        {
+            var mousePos = Input.mousePosition;
+            Ray ray = Camera.main.ScreenPointToRay(mousePos);
+            Plane xy = new Plane(Vector3.forward, new Vector3(0, 0, baseZLevel));
+            float distance;
+            xy.Raycast(ray, out distance);
+            return ray.GetPoint(distance);
         }
     }
 }

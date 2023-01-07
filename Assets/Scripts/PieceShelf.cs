@@ -3,6 +3,7 @@ namespace Oatsbarley.GameJams.LD52
     using System;
     using System.Collections.Generic;
     using NaughtyAttributes;
+    using Oatsbarley.GameJams.LD52.Pieces;
     using UnityEngine;
 
     public class PieceShelf : MonoBehaviour
@@ -12,12 +13,15 @@ namespace Oatsbarley.GameJams.LD52
 
         [SerializeField] private int length;
 
+        [Header("Debugging (TO BE REMOVED)")] 
+        [SerializeField] private PieceDefinition[] definitions;
+
         [Button()]
         public void FillShelf()
         {
             for (var i = 0; i < length; i++)
             {
-                var piece = InstantiatePiece();
+                var piece = InstantiatePiece(definitions[i % definitions.Length]);
                 shelfGrid.PlaceObject(piece, new Vector2Int(i, 0));
             }
         }
@@ -113,9 +117,12 @@ namespace Oatsbarley.GameJams.LD52
             shelfGrid.PlaceObject(piece, gridPosition);
         }
 
-        private Piece InstantiatePiece()
+        private Piece InstantiatePiece(PieceDefinition definition)
         {
-            return Instantiate(piecePrefab);
+            var piece = Instantiate(piecePrefab);
+            piece.SetDefinition(definition);
+            
+            return piece;
         }
     }
 }
