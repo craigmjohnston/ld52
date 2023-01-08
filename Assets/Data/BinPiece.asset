@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fef63af402ae4b60a435e2b193fa33cb, type: 3}
-  m_Name: WaterPiece
+  m_Script: {fileID: 11500000, guid: 3afa7769e7e74dc6a057a8e007e03c39, type: 3}
+  m_Name: BinPiece
   m_EditorClassIdentifier: 
-  Tag: piece_water
-  Name: Water
-  Sprite: {fileID: 21300000, guid: 99c03ad8c27a56445b66c95f49ce4c69, type: 3}
+  Tag: piece_bin
+  Name: Bin
+  Sprite: {fileID: 21300000, guid: 63393f680fea7ec4c98bd8e1ad61a3cc, type: 3}

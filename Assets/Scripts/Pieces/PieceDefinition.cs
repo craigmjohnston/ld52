@@ -12,6 +12,10 @@ namespace Oatsbarley.GameJams.LD52.Pieces
         {
         }
 
+        public virtual void AfterTick(Piece piece, SurroundingObjects<Piece> surroundingPieces)
+        {
+        }
+
         public virtual bool CanPlace(SurroundingObjects<Piece> surroundingPieces) // todo return a description of why not
         {
             return true;
@@ -21,5 +25,16 @@ namespace Oatsbarley.GameJams.LD52.Pieces
         {
             return true;
         }
+    }
+
+    public static class PieceTag
+    {
+        public const string Leaf = "piece_leaf";
+        public const string Stalk = "piece_stalk";
+        public const string Sunshine = "piece_sunshine";
+        public const string Seed = "piece_seed";
+        
+        // debug only
+        public const string Bin = "piece_bin";
     }
 }

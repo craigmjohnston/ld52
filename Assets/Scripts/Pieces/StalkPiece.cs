@@ -8,15 +8,35 @@ namespace Oatsbarley.GameJams.LD52.Pieces
     {
         public override void Tick(Piece piece, SurroundingObjects<Piece> surroundingPieces)
         {
-            if (surroundingPieces.Any(p => p.obj != null && p.obj.Definition.Name == "Wind"))
+            // GameManager.Instance.GeneratePiece(PieceTag.Leaf);
+        }
+
+        public override void AfterTick(Piece piece, SurroundingObjects<Piece> surroundingPieces)
+        {
+            if (piece.ReplacedThisTick)
             {
-                Debug.Log("Whoooooooooooo.....");
+                return;
+            }
+            
+            var leafPieces = surroundingPieces
+                .Where(p => p.obj != null && p.obj.Definition.Tag == PieceTag.Leaf)
+                .ToArray();
+            
+            if (leafPieces.Length >= 2)
+            {
+                var randomPiece = leafPieces[Random.Range(0, leafPieces.Length)];
+                GameManager.Instance.ReplacePiece(randomPiece.obj, PieceTag.Stalk);
             }
         }
 
         public override bool CanPlace(SurroundingObjects<Piece> surroundingPieces)
         {
-            return surroundingPieces.Any(p => p.obj != null && p.obj.Definition.Tag is "piece_stalk" or "piece_seed" && p.direction.y == -1);
+            if (surroundingPieces.below == null)
+            {
+                return false;
+            }
+            
+            return surroundingPieces.below.Definition.Tag is PieceTag.Stalk or PieceTag.Seed;
         }
     }
 }

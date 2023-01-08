@@ -4,10 +4,14 @@ namespace Oatsbarley.GameJams.LD52
     using System.Linq;
     using UnityEngine;
     using UnityEngine.InputSystem;
+    using Object = UnityEngine.Object;
 
     public class InputManager : MonoBehaviour
     {
         [SerializeField] private Camera inputCamera;
+        [SerializeField] private Transform cameraTransform;
+        [SerializeField] private float cameraMoveSpeed;
+        
         [SerializeField] private PieceGridManager gridManager;
         [SerializeField] private PieceShelf pieceShelf;
         
@@ -18,6 +22,7 @@ namespace Oatsbarley.GameJams.LD52
 
         private Piece currentPiece;
         private Vector3 mouseOffset;
+        private Vector2 cameraVector;
 
         private void Update()
         {
@@ -27,6 +32,18 @@ namespace Oatsbarley.GameJams.LD52
                 var offsetPos = mouseWorldPos - mouseOffset;
                 currentPiece.transform.position = new Vector3(offsetPos.x, offsetPos.y, dragZLevel);
             }
+            
+            cameraTransform.Translate(cameraVector * cameraMoveSpeed * Time.deltaTime);
+        }
+
+        public void Clear()
+        {
+            if (this.currentPiece == null)
+            {
+                return;
+            }
+            
+            Object.Destroy(this.currentPiece.gameObject);
         }
         
         public void PlayerClicked(InputAction.CallbackContext context)
@@ -42,6 +59,11 @@ namespace Oatsbarley.GameJams.LD52
             }
             
             MouseUp();
+        }
+
+        public void CameraMoved(InputAction.CallbackContext context)
+        {
+            cameraVector = context.ReadValue<Vector2>();
         }
 
         private void MouseDown()
@@ -116,7 +138,7 @@ namespace Oatsbarley.GameJams.LD52
                 Debug.LogError("Couldn't place piece in position, it doesn't want to go there.");
                 pieceShelf.ReplacePiece(currentPiece);
             }
-            else if (surrounding.Any(p => p.obj != null && !p.obj.Definition.CanPlaceOther(p.obj, p.direction * -1, surrounding)))
+            else if (surrounding.Any(p => p.obj != null && !p.obj.Definition.CanPlaceOther(currentPiece, p.direction * -1, surrounding)))
             {
                 Debug.LogError("Couldn't place piece in position, something else doesn't want it to go there.");
                 pieceShelf.ReplacePiece(currentPiece);

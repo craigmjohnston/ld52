@@ -2,6 +2,7 @@ namespace Oatsbarley.GameJams.LD52.Definitions
 {
     public class LevelDefinition
     {
+        public PieceLocation[] StartingPieces { get; set; }
         public ScenarioDefinition[] Scenarios { get; set; }
     }
 
@@ -17,5 +18,11 @@ namespace Oatsbarley.GameJams.LD52.Definitions
     {
         public string Tag { get; set; }
         public float Chance { get; set; }
+    }
+
+    public class PieceLocation
+    {
+        public string Tag { get; set; }
+        public int[] Position { get; set; }
     }
 }

@@ -1,51 +1,48 @@
 {
+    "startingPieces": [
+        { "tag": "piece_seed", "position": [0, 0] },
+        { "tag": "piece_stalk", "position": [0, 1] },
+        { "tag": "piece_bin", "position": [0, -3] }
+    ],
     "scenarios": [
         {
             "name": "First Days of Spring",
-            "startingShelf": ["piece_seed"],
+            "startingShelf": ["piece_leaf"],
             "shelfLength": 2,
             "dropChances": [
-                { "tag": "piece_water", "chance": 1 }
+                { "tag": "piece_sunshine", "chance": 1 }
             ]
         },
         {
             "name": "Spring",
             "startingShelf": [],
-            "shelfLength": 5,
+            "shelfLength": 3,
             "dropChances": [
-                { "tag": "piece_stalk", "chance": 1 },
-                { "tag": "piece_root", "chance": 2 },
-                { "tag": "piece_leaf", "chance": 3 }
+                { "tag": "piece_sunshine", "chance": 1 }
             ]            
         },
         {
             "name": "Summer",
             "startingShelf": [],
-            "shelfLength": 5,
+            "shelfLength": 4,
             "dropChances": [
-                { "tag": "piece_stalk", "chance": 4 },
-                { "tag": "piece_root", "chance": 2 },
-                { "tag": "piece_leaf", "chance": 3 }
+                { "tag": "piece_sunshine", "chance": 1 }
             ]
         },
         {
             "name": "Autumn",
             "startingShelf": [],
-            "shelfLength": 5,
+            "shelfLength": 3,
             "dropChances": [
-                { "tag": "piece_stalk", "chance": 4 },
-                { "tag": "piece_root", "chance": 2 },
-                { "tag": "piece_leaf", "chance": 3 }
+                { "tag": "piece_sunshine", "chance": 1 }
             ]
         },
         {
             "name": "Winter",
             "startingShelf": [],
-            "shelfLength": 5,
+            "shelfLength": 2,
             "dropChances": [
-                { "tag": "piece_stalk", "chance": 4 },
-                { "tag": "piece_root", "chance": 2 },
-                { "tag": "piece_leaf", "chance": 3 }
+                { "tag": "piece_sunshine", "chance": 1 }
             ]
         }
     ]
