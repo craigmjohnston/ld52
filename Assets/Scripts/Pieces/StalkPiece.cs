@@ -25,7 +25,7 @@ namespace Oatsbarley.GameJams.LD52.Pieces
             if (leafPieces.Length >= 2)
             {
                 var randomPiece = leafPieces[Random.Range(0, leafPieces.Length)];
-                GameManager.Instance.ReplacePiece(randomPiece.obj, PieceTag.Stalk);
+                GameManager.Instance.ReplacePiece(randomPiece.obj, surroundingPieces.gridPosition + randomPiece.direction, PieceTag.Stalk);
             }
         }
 

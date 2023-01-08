@@ -1,10 +1,12 @@
 namespace Oatsbarley.GameJams.LD52
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using NaughtyAttributes;
     using Newtonsoft.Json;
     using Oatsbarley.GameJams.LD52.Definitions;
+    using Oatsbarley.GameJams.LD52.Pieces;
     using UnityEngine;
     using Object = UnityEngine.Object;
 
@@ -27,10 +29,11 @@ namespace Oatsbarley.GameJams.LD52
 
         [SerializeField] private PieceStatusDefinition[] statusDefinitions;
 
+        private Dictionary<string, int> stats = new Dictionary<string, int>();
+
         public static GameManager Instance => Object.FindObjectOfType<GameManager>(); // don't ask
 
         public float CellSize => cellSize;
-        // public PieceStatusDefinition[] StatusDefinitions => statusDefinitions;
 
         private LevelDefinition currentLevel;
         private int currentScenarioIndex;
@@ -43,6 +46,8 @@ namespace Oatsbarley.GameJams.LD52
         [Button()]
         public void RunLevel()
         {
+            stats.Clear();
+            
             if (currentLevel != null)
             {
                 Debug.LogError("Can't run a level when there's already one running. Clear the current level first.");
@@ -75,8 +80,7 @@ namespace Oatsbarley.GameJams.LD52
         public void GeneratePiece(string tag)
         {
             Debug.Log($"Generate '{tag}'");
-            var piece = pieceShelf.InstantiatePiece(tag);
-            pieceShelf.ReplacePiece(piece, new Vector2Int(pieceShelf.Length, 0));
+            pieceShelf.GeneratePiece(tag);
         }
 
         public void ConsumePiece(Piece piece, Vector2Int gridPosition)
@@ -86,10 +90,12 @@ namespace Oatsbarley.GameJams.LD52
             Object.Destroy(piece.gameObject);
         }
 
-        public void ReplacePiece(Piece piece, string definitionTag)
+        public void ReplacePiece(Piece piece, Vector2Int gridPosition, string definitionTag)
         {
             var definition = pieceShelf.GetDefinition(definitionTag);
             piece.ReplaceDefinition(definition);
+            
+            piece.Definition.OnReplace(piece, grid.GetSurroundingObjects(gridPosition));
         }
 
         public PieceStatusDefinition GetStatusDefinition(PieceStatus status)
@@ -138,9 +144,30 @@ namespace Oatsbarley.GameJams.LD52
         private void OnAllPiecesUsed()
         {
             Tick();
+            EndScenario();
+        }
+
+        private void EndScenario()
+        {
+            // stats
+            var leaves = grid.All.Count(p => p.Definition.Tag == PieceTag.Leaf);
+            SetMaxStat("stat_max_leaves", leaves);
+
+            if (leaves == 0)
+            {
+                EndGame();
+                return;
+            }
             
             currentScenarioIndex += 1;
             RunCurrentScenario();
+        }
+
+        private void EndGame()
+        {
+            var cachedStats = stats.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            ClearLevel();
+            AppManager.Instance.ShowEndGame(cachedStats);
         }
 
         private void ClearGrid()
@@ -184,6 +211,38 @@ namespace Oatsbarley.GameJams.LD52
                 var surrounding = grid.GetSurroundingObjects(piece.gridPos);
                 (piece.obj).Definition.AfterTick(piece.obj, surrounding);
             }
+        }
+
+        public void IncrementStat(string key, int amount)
+        {
+            if (!stats.TryGetValue(key, out int value))
+            {
+                value = 0;
+            }
+
+            value += amount;
+            stats[key] = value;
+        }
+
+        public void SetStat(string key, int amount)
+        {
+            stats[key] = amount;
+        }
+
+        public void SetMaxStat(string key, int amount)
+        {
+            var value = GetStat(key);
+            stats[key] = Mathf.Max(value, amount);
+        }
+
+        public int GetStat(string key)
+        {
+            if (!stats.TryGetValue(key, out int value))
+            {
+                return 0;
+            }
+
+            return value;
         }
     }
 }

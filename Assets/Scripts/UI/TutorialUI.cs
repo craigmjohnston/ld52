@@ -1,11 +1,13 @@
 namespace Oatsbarley.GameJams.LD52.UI
 {
+    using System;
     using System.Collections.Generic;
     using NaughtyAttributes;
     using Newtonsoft.Json;
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
+    using Object = UnityEngine.Object;
 
     public class TutorialUI : MonoBehaviour
     {
@@ -18,6 +20,8 @@ namespace Oatsbarley.GameJams.LD52.UI
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private VerticalLayoutGroup layoutGroup;
         [SerializeField] private VerticalLayoutGroup itemsLayoutGroup;
+
+        public event Action Hiding;
 
         private List<TutorialUIItem> items = new List<TutorialUIItem>();
 
@@ -61,6 +65,8 @@ namespace Oatsbarley.GameJams.LD52.UI
             {
                 Object.Destroy(item.gameObject);
             }
+            
+            Hiding?.Invoke();
         }
 
         private TutorialUIItem InstantiateItem()

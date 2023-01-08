@@ -133,20 +133,36 @@ namespace Oatsbarley.GameJams.LD52
             var cursorPosition = GetCursorPosition();
             var surrounding = gridManager.GetSurroundingObjects(cursorPosition);
 
-            if (!currentPiece.Definition.CanPlace(surrounding))
+            bool placedSuccessfully = true;
+
+            if (cursorPosition.y < 0)
+            {
+                Debug.LogError("Can't place a piece at or below the seed level");
+                placedSuccessfully = false;
+            }
+            else if (!currentPiece.Definition.CanPlace(surrounding))
             {
                 Debug.LogError("Couldn't place piece in position, it doesn't want to go there.");
-                pieceShelf.ReplacePiece(currentPiece);
+                placedSuccessfully = false;
             }
             else if (surrounding.Any(p => p.obj != null && !p.obj.Definition.CanPlaceOther(currentPiece, p.direction * -1, surrounding)))
             {
                 Debug.LogError("Couldn't place piece in position, something else doesn't want it to go there.");
-                pieceShelf.ReplacePiece(currentPiece);
+                placedSuccessfully = false;
             } 
             else if (!gridManager.PlaceObject(currentPiece, cursorPosition))
             {
                 Debug.LogError("Couldn't place piece in position, something is already there.");
+                placedSuccessfully = false;
+            }
+
+            if (!placedSuccessfully)
+            {
                 pieceShelf.ReplacePiece(currentPiece);
+            }
+            else
+            {
+                currentPiece.Definition.OnPlace(currentPiece, gridManager.GetSurroundingObjects(cursorPosition));
             }
 
             currentPiece = null;

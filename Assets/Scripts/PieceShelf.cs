@@ -170,6 +170,12 @@ namespace Oatsbarley.GameJams.LD52
             }
         }
 
+        public void GeneratePiece(string tag)
+        {
+            var piece = InstantiatePiece(tag);
+            ReplacePiece(piece, new Vector2Int(Length, 0));
+        }
+
         public void ReplacePiece(Piece piece, Vector2Int? gridPosition = null)
         {
             if (gridPosition == null)
@@ -180,6 +186,8 @@ namespace Oatsbarley.GameJams.LD52
             var selectStart = gridPosition.Value.x;
             ShiftPieces(selectStart, Length - selectStart, +1);
             shelfGrid.PlaceObject(piece, gridPosition.Value);
+            
+            piece.transform.SetParent(transform);
         }
 
         public bool HasPieces()

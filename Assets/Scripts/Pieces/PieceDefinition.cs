@@ -8,6 +8,14 @@ namespace Oatsbarley.GameJams.LD52.Pieces
         public string Name;
         public Sprite Sprite;
 
+        public virtual void OnPlace(Piece piece, SurroundingObjects<Piece> surroundingPieces)
+        {
+        }
+
+        public virtual void OnReplace(Piece piece, SurroundingObjects<Piece> surroundingPieces)
+        {
+        }
+
         public virtual void Tick(Piece piece, SurroundingObjects<Piece> surroundingPieces)
         {
         }
