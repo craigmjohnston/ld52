@@ -15,3 +15,4 @@ MonoBehaviour:
   Tag: piece_bin
   Name: Bin
   Sprite: {fileID: 21300000, guid: 63393f680fea7ec4c98bd8e1ad61a3cc, type: 3}
+  colour: {r: 1, g: 1, b: 1, a: 1}

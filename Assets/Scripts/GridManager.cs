@@ -1,9 +1,9 @@
 namespace Oatsbarley.GameJams.LD52
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using DG.Tweening;
     using UnityEngine;
 
     public class GridManager<T> : MonoBehaviour where T : MonoBehaviour
@@ -49,8 +49,8 @@ namespace Oatsbarley.GameJams.LD52
             var gridPos = grid.WorldToCell(worldPosition);
             return new Vector2Int(gridPos.x, gridPos.y);
         }
-        
-        public bool PlaceObject(T obj, Vector2Int gridPosition, bool allowOverlap = false)
+
+        public bool PlaceObject(T obj, Vector2Int gridPosition, bool allowOverlap = false, float? tweenDuration = null)
         {
             if (!allowOverlap && GetObjectInGridPosition(gridPosition) != null)
             {
@@ -58,7 +58,16 @@ namespace Oatsbarley.GameJams.LD52
             } 
             
             var worldPos = grid.GetCellCenterWorld(new Vector3Int(gridPosition.x, gridPosition.y));
-            obj.transform.position = new Vector3(worldPos.x, worldPos.y, zPosition);
+            var targetPos = new Vector3(worldPos.x, worldPos.y, zPosition);
+
+            if (tweenDuration == null)
+            {
+                obj.transform.position = targetPos;
+            }
+            else
+            {
+                obj.transform.DOMove(targetPos, tweenDuration.Value).SetEase(Ease.InOutQuad);
+            }
 
             placedObjects[gridPosition] = obj;
 

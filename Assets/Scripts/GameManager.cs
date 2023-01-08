@@ -7,8 +7,10 @@ namespace Oatsbarley.GameJams.LD52
     using Newtonsoft.Json;
     using Oatsbarley.GameJams.LD52.Definitions;
     using Oatsbarley.GameJams.LD52.Pieces;
+    using TMPro;
     using UnityEngine;
     using Object = UnityEngine.Object;
+    using Random = UnityEngine.Random;
 
     [Serializable]
     public class PieceStatusDefinition
@@ -17,17 +19,29 @@ namespace Oatsbarley.GameJams.LD52
         public Color Colour;
     }
 
+    [Serializable]
+    public class SfxDefinition
+    {
+        public string Tag;
+        public AudioClip[] Clips;
+    }
+
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private GridManager<Piece> grid;
         [SerializeField] private PieceShelf pieceShelf;
         [SerializeField] private InputManager inputManager;
-
+        [SerializeField] private AudioSource audioSource;
+        
         [SerializeField] private float cellSize;
         
         [SerializeField] private TextAsset levelJson;
 
         [SerializeField] private PieceStatusDefinition[] statusDefinitions;
+        [SerializeField] private SfxDefinition[] sfxDefinitions;
+
+        [SerializeField] private CanvasGroup canvasGroup;
+        [SerializeField] private TextMeshProUGUI seasonNameTextComponent;
 
         private Dictionary<string, int> stats = new Dictionary<string, int>();
 
@@ -58,6 +72,8 @@ namespace Oatsbarley.GameJams.LD52
             var definition = JsonConvert.DeserializeObject<LevelDefinition>(json);
             
             RunLevel(definition);
+
+            canvasGroup.alpha = 1;
         }
 
         [Button()]
@@ -126,6 +142,7 @@ namespace Oatsbarley.GameJams.LD52
                 var gridPosition = new Vector2Int(pieceLocation.Position[0], pieceLocation.Position[1]);
                 
                 grid.PlaceObject(piece, gridPosition);
+                piece.Definition.OnPlace(piece, grid.GetSurroundingObjects(gridPosition));
             }
         }
 
@@ -139,6 +156,7 @@ namespace Oatsbarley.GameJams.LD52
         {
             Debug.Log($"Running scenario: {scenarioDefinition.Name}");
             pieceShelf.FillShelf(scenarioDefinition.StartingShelf, scenarioDefinition.DropChances, scenarioDefinition.ShelfLength);
+            seasonNameTextComponent.text = $"({scenarioDefinition.Name})";
         }
 
         private void OnAllPiecesUsed()
@@ -165,8 +183,12 @@ namespace Oatsbarley.GameJams.LD52
 
         private void EndGame()
         {
+            SetStat("stat_max_stalks", grid.All.Count(p => p.Definition.Tag == PieceTag.Stalk));
+            
             var cachedStats = stats.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             ClearLevel();
+
+            canvasGroup.alpha = 0;
             AppManager.Instance.ShowEndGame(cachedStats);
         }
 
@@ -243,6 +265,18 @@ namespace Oatsbarley.GameJams.LD52
             }
 
             return value;
+        }
+
+        public void PlaySfx(string tag)
+        {
+            var definition = sfxDefinitions.FirstOrDefault(s => s.Tag == tag);
+            if (definition == null)
+            {
+                Debug.LogError($"Couldn't find SFX definition with tag '{tag}'");
+                return;
+            }
+            
+            audioSource.PlayOneShot(definition.Clips[Random.Range(0, definition.Clips.Length)]);
         }
     }
 }

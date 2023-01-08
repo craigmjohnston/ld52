@@ -1,13 +1,10 @@
 {
-    "bodyText": "Grow your plant by placing tiles adjacent to others\ntry not to let all of the leaves fall off",
+    "bodyText": "grow your plant by placing tiles adjacent to others\ntry not to let all of the leaves fall off",
     "items": [
-        { "description": "This is a seed", "imagePaths": ["Pieces/seed"] },
-        { "description": "This is a branch", "imagePaths": ["Pieces/tree-branch"] },
-        { "description": "Place leaves adjacent to branches", "imagePaths": ["Pieces/leaf"] },
-        { "description": "If 2 or more leaves are touching a branch, one of them will turn into a branch", "imagePaths": ["Pieces/tree-branch", "Pieces/leaf", "Pieces/leaf"] },
-        { "description": "Place sunshine adjacent to leaves. If leaves don't get sunshine for 2 turns, they'll fall off", "imagePaths": ["Pieces/sun"] },
-        { "description": "A leaf touching 2 sunshines will generate an extra leaf at the end of the round", "imagePaths": ["Pieces/leaf", "Pieces/sun", "Pieces/sun"] },
-        { "description": "", "imagePaths": [] },
-        { "description": "You can move the camera with WASD", "imagePaths": [] }
+        { "description": "this is a branch and a leaf", "imagePaths": ["Pieces/tree-branch", "Pieces/leaf"] },
+        { "description": "if 2 leaves touch a branch, one turns into a branch", "imagePaths": ["Pieces/leaf", "Pieces/tree-branch", "Pieces/leaf"] },
+        { "description": "if leaves don't get sunshine for 2 turns, they'll fall off", "imagePaths": ["Pieces/sun"] },
+        { "description": "a leaf touching 2 sunshines will give you another leaf to place", "imagePaths": ["Pieces/sun", "Pieces/leaf", "Pieces/sun"] },
+        { "description": "you can move the camera with WASD", "imagePaths": [] }
     ]
 }

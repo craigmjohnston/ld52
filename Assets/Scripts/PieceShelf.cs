@@ -13,6 +13,7 @@ namespace Oatsbarley.GameJams.LD52
     {
         [SerializeField] private PieceGridManager shelfGrid;
         [SerializeField] private Piece piecePrefab;
+        [SerializeField] private float shiftDuration;
 
         [SerializeField] private PieceDefinition[] definitions;
 
@@ -146,7 +147,7 @@ namespace Oatsbarley.GameJams.LD52
                 -1);
         }
 
-        private void ShiftPieces(int selectStart, int selectLength, int shiftDistance)
+        private void ShiftPieces(int selectStart, int selectLength, int shiftDistance, bool shouldTween = true)
         {
             var pieces = new List<Piece>();
             
@@ -166,7 +167,7 @@ namespace Oatsbarley.GameJams.LD52
             for (var i = 0; i < pieces.Count; i++)
             {
                 var piece = pieces[i];
-                shelfGrid.PlaceObject(piece, new Vector2Int(selectStart + i + shiftDistance, 0));
+                shelfGrid.PlaceObject(piece, new Vector2Int(selectStart + i + shiftDistance, 0), tweenDuration:(shouldTween ? shiftDuration : null));
             }
         }
 

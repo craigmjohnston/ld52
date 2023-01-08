@@ -31,12 +31,7 @@ namespace Oatsbarley.GameJams.LD52.Pieces
 
         public override bool CanPlace(SurroundingObjects<Piece> surroundingPieces)
         {
-            if (surroundingPieces.below == null)
-            {
-                return false;
-            }
-            
-            return surroundingPieces.below.Definition.Tag is PieceTag.Stalk or PieceTag.Seed;
+            return surroundingPieces.Any(p => p.obj != null && p.obj.Definition.Tag == PieceTag.Stalk);
         }
     }
 }

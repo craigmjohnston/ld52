@@ -28,7 +28,8 @@ namespace Oatsbarley.GameJams.LD52.UI
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
 
-            ShowStat(stats, "stat_max_leaves", "You grew to {0} leaves in total");
+            // ShowStat(stats, "stat_max_leaves", "You grew to {0} leaves in total");
+            ShowStat(stats, "stat_max_stalks", "You grew to {0} branches in total");
 
             // debug
             foreach (var stat in stats)

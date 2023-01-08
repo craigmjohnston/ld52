@@ -162,6 +162,7 @@ namespace Oatsbarley.GameJams.LD52
             }
             else
             {
+                GameManager.Instance.PlaySfx("sfx_place_piece");
                 currentPiece.Definition.OnPlace(currentPiece, gridManager.GetSurroundingObjects(cursorPosition));
             }
 

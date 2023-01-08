@@ -1,6 +1,8 @@
 namespace Oatsbarley.GameJams.LD52
 {
-    using System.Linq;
+    using System;
+    using DG.Tweening;
+    using NaughtyAttributes;
     using Oatsbarley.GameJams.LD52.Pieces;
     using UnityEngine;
 
@@ -10,29 +12,65 @@ namespace Oatsbarley.GameJams.LD52
         Bad
     }
 
+    [Serializable]
+    public class PieceSide
+    {
+        public SpriteRenderer spriteRenderer;
+        public SpriteRenderer statusSpriteRenderer;
+
+        public void SetDefinition(PieceDefinition definition, float scaleToUnits)
+        {
+            spriteRenderer.sprite = definition.Sprite;
+            spriteRenderer.color = definition.colour;
+            
+            Scale(scaleToUnits, definition.scale);
+        }
+
+        private void Scale(float scaleToUnits, float spriteScale)
+        {
+            var ppu = spriteRenderer.sprite.pixelsPerUnit;
+            
+            var spriteW = spriteRenderer.sprite.rect.width / ppu;
+            var spriteH = spriteRenderer.sprite.rect.height / ppu;
+
+            var aspectRatio = spriteH / spriteW;
+            float scaleFactor = scaleToUnits / (aspectRatio <= 1 ? spriteW : spriteH);
+            var scale = new Vector3(scaleFactor, scaleFactor * aspectRatio, 1);
+            
+            spriteRenderer.transform.localScale = scale * spriteScale;
+        }
+    }
+
     public class Piece : MonoBehaviour
     {
-        [SerializeField] private SpriteRenderer spriteRenderer;
-        [SerializeField] private SpriteRenderer statusSpriteRenderer;
-
+        [SerializeField] private PieceSide[] sides;
         [SerializeField] private float scaleToUnits = 1f;
+        [SerializeField] private float flipSpeed = 1f;
+        [SerializeField] private MeshRenderer meshRenderer;
 
         private PieceStatus status = PieceStatus.None;
         
         public PieceDefinition Definition { get; private set; }
         public bool IsLocked { get; private set; }
         public bool ReplacedThisTick { get; private set; }
+        
+        private int currentSideIndex = 0;
+
+        private PieceSide CurrentSide => sides[currentSideIndex];
+        private PieceSide OtherSide => sides[(currentSideIndex + 1) % 2];
 
         private void Start()
         {
             transform.localScale *= GameManager.Instance.CellSize;
         }
 
-        public void SetDefinition(PieceDefinition definition)
+        public void SetDefinition(PieceDefinition definition, PieceSide side = null)
         {
+            side ??= CurrentSide;
+            
             Definition = definition;
-            SetSprite(definition.Sprite);
-            statusSpriteRenderer.enabled = false;
+            side.SetDefinition(definition, scaleToUnits);
+            side.statusSpriteRenderer.enabled = false;
         }
 
         public PieceStatus GetStatus()
@@ -45,58 +83,50 @@ namespace Oatsbarley.GameJams.LD52
             var statusDefinition = GameManager.Instance.GetStatusDefinition(status);
             this.status = status;
 
-            statusSpriteRenderer.color = statusDefinition.Colour;
-            statusSpriteRenderer.enabled = true;
+            sides[currentSideIndex].statusSpriteRenderer.color = statusDefinition.Colour;
+            sides[currentSideIndex].statusSpriteRenderer.enabled = true;
         }
 
         public void ClearStatus()
         {
             status = PieceStatus.None;
-            statusSpriteRenderer.enabled = false;
+            sides[currentSideIndex].statusSpriteRenderer.enabled = false;
         }
 
         public void Lock()
         {
             IsLocked = true;
-            // todo some sort of visual indication
+            
+            this.meshRenderer.enabled = false;
+            this.OtherSide.spriteRenderer.enabled = false;
+            this.OtherSide.statusSpriteRenderer.enabled = false;
         }
 
         public void ReplaceDefinition(PieceDefinition definition)
         {
             ReplacedThisTick = true;
-            SetDefinition(definition);
+            SetDefinition(definition, OtherSide);
 
             if (IsLocked)
             {
                 this.IsLocked = false;
                 // todo visual
             }
+            
+            Flip();
         }
 
         public void OnTick()
         {
             ReplacedThisTick = false;
         }
-
-        private void SetSprite(Sprite sprite)
+        
+        [Button()]
+        public void Flip()
         {
-            spriteRenderer.sprite = sprite;
+            transform.DORotate(Vector3.up * 180f, flipSpeed, RotateMode.LocalAxisAdd).SetEase(Ease.InOutQuad);
             
-            Scale();
-        }
-
-        private void Scale()
-        {
-            var ppu = spriteRenderer.sprite.pixelsPerUnit;
-            
-            var spriteW = spriteRenderer.sprite.rect.width / ppu;
-            var spriteH = spriteRenderer.sprite.rect.height / ppu;
-
-            var aspectRatio = spriteH / spriteW;
-            float scaleFactor = scaleToUnits / (aspectRatio <= 1 ? spriteW : spriteH);
-            var scale = new Vector3(scaleFactor, scaleFactor * aspectRatio, 1);
-            
-            spriteRenderer.transform.localScale = scale;
+            currentSideIndex = currentSideIndex == 0 ? 1 : 0;
         }
     }
 }

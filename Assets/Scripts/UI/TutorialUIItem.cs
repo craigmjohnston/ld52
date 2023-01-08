@@ -8,7 +8,7 @@ namespace Oatsbarley.GameJams.LD52.UI
     public class TutorialUIItem : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI textComponent;
-        [SerializeField] private Image imagePrefab;
+        [SerializeField] private TutorialUIItemImage imagePrefab;
         [SerializeField] private Transform imagesTransform;
         [SerializeField] private HorizontalLayoutGroup layoutGroup;
 
@@ -20,7 +20,7 @@ namespace Oatsbarley.GameJams.LD52.UI
             {
                 var imageComponent = InstantiateImage();
                 imageComponent.transform.SetParent(imagesTransform, false);
-                imageComponent.sprite = Resources.Load<Sprite>(definition.ImagePaths[i]);
+                imageComponent.SetSprite(Resources.Load<Sprite>(definition.ImagePaths[i]));
             }
 
             if (!definition.ImagePaths.Any())
@@ -32,7 +32,7 @@ namespace Oatsbarley.GameJams.LD52.UI
             layoutGroup.enabled = true;
         }
 
-        private Image InstantiateImage()
+        private TutorialUIItemImage InstantiateImage()
         {
             return Instantiate(imagePrefab);
         }

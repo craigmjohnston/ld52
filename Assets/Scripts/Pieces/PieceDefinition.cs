@@ -6,7 +6,11 @@ namespace Oatsbarley.GameJams.LD52.Pieces
     {
         public string Tag;
         public string Name;
+        
+        // visual
         public Sprite Sprite;
+        public Color colour;
+        public float scale = 1f;
 
         public virtual void OnPlace(Piece piece, SurroundingObjects<Piece> surroundingPieces)
         {

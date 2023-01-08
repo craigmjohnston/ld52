@@ -1,12 +1,12 @@
 {
     "startingPieces": [
         { "tag": "piece_seed", "position": [0, 0] },
-        { "tag": "piece_stalk", "position": [0, 1] },
-        { "tag": "piece_bin", "position": [0, -3] }
+        { "tag": "piece_stalk", "position": [0, 1] }
     ],
     "scenarios": [
         {
-            "name": "First Days of Spring",
+            "name": "first days of spring",
+            "colour": "#ece1f2",
             "startingShelf": ["piece_leaf"],
             "shelfLength": 2,
             "dropChances": [
@@ -14,7 +14,8 @@
             ]
         },
         {
-            "name": "Spring",
+            "name": "spring",
+            "colour": "#dec0f0",
             "startingShelf": [],
             "shelfLength": 2,
             "dropChances": [
@@ -22,7 +23,8 @@
             ]            
         },
         {
-            "name": "Summer",
+            "name": "summer",
+            "colour": "#e0b516",
             "startingShelf": [],
             "shelfLength": 3,
             "dropChances": [
@@ -30,7 +32,8 @@
             ]
         },
         {
-            "name": "Autumn",
+            "name": "autumn",
+            "colour": "#32a852",
             "startingShelf": [],
             "shelfLength": 2,
             "dropChances": [
@@ -38,11 +41,12 @@
             ]
         },
         {
-            "name": "Winter",
+            "name": "winter",
+            "colour": "#5a94c7",
             "startingShelf": [],
             "shelfLength": 1,
             "dropChances": [
-                { "tag": "piece_sunshine", "chance": 1 }
+                { "tag": "piece_stalk", "chance": 1 }
             ]
         }
     ]
