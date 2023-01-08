@@ -1,5 +1,6 @@
 namespace Oatsbarley.GameJams.LD52.UI
 {
+    using System.Linq;
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
@@ -20,6 +21,11 @@ namespace Oatsbarley.GameJams.LD52.UI
                 var imageComponent = InstantiateImage();
                 imageComponent.transform.SetParent(imagesTransform, false);
                 imageComponent.sprite = Resources.Load<Sprite>(definition.ImagePaths[i]);
+            }
+
+            if (!definition.ImagePaths.Any())
+            {
+                Object.Destroy(imagesTransform.gameObject);
             }
             
             Canvas.ForceUpdateCanvases();

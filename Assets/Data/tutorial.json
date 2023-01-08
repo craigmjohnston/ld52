@@ -6,6 +6,8 @@
         { "description": "Place leaves adjacent to branches", "imagePaths": ["Pieces/leaf"] },
         { "description": "If 2 or more leaves are touching a branch, one of them will turn into a branch", "imagePaths": ["Pieces/tree-branch", "Pieces/leaf", "Pieces/leaf"] },
         { "description": "Place sunshine adjacent to leaves. If leaves don't get sunshine for 2 turns, they'll fall off", "imagePaths": ["Pieces/sun"] },
-        { "description": "A leaf touching 2 sunshines will generate an extra leaf at the end of the round", "imagePaths": ["Pieces/leaf", "Pieces/sun", "Pieces/sun"] }
+        { "description": "A leaf touching 2 sunshines will generate an extra leaf at the end of the round", "imagePaths": ["Pieces/leaf", "Pieces/sun", "Pieces/sun"] },
+        { "description": "", "imagePaths": [] },
+        { "description": "You can move the camera with WASD", "imagePaths": [] }
     ]
 }
